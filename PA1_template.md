@@ -70,7 +70,7 @@ head(data)
 ### What is mean total number of steps taken per day?
 We can ignore the missing values in the dataset for this part of the assignment.
 
-*Calculate the total number of steps taken per day.  
+Calculate the total number of steps taken per day.  
 
 ```r
 data2 <- with(data, tapply(steps, date, sum, na.rm = T))
@@ -82,7 +82,7 @@ head(data2)
 ##          0        126      11352      12116      13294      15420
 ```
 
-*Make a histogram of the total number of steps taken each day.
+Make a histogram of the total number of steps taken each day.
 
 ```r
 hist(data2, col = "blue", xlab = " Total number of steps",
@@ -91,7 +91,7 @@ hist(data2, col = "blue", xlab = " Total number of steps",
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
-*Calculate and report the mean of the total number of steps taken per day.
+Calculate and report the mean of the total number of steps taken per day.
 
 ```r
 mean(data2)
@@ -101,7 +101,7 @@ mean(data2)
 ## [1] 9354.23
 ```
 
-*Calculate and report the median of the total number of steps taken per day.
+Calculate and report the median of the total number of steps taken per day.
 
 ```r
 median(data2)
@@ -113,7 +113,7 @@ median(data2)
 
 ### What is the average daily activity pattern?
 
-*Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
+Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
 
 ```r
 data3 <- with(data, tapply(steps, interval, mean, na.rm = T))
@@ -141,7 +141,7 @@ plot(intervaldata, data3, type ="l", col = "red",
 
 ![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
-* Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 ```r
 maxindex <- which(data3==max(data3))
@@ -156,7 +156,7 @@ print(maxinterval)
 ### Imputing missing values
 Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
 
-*Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs).
+Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs).
 
 ```r
 nas<-sum(is.na(data))
@@ -167,16 +167,16 @@ print(nas)
 ## [1] 2304
 ```
 
-*We plan to use the mean steps for that 5-mintue interval to fill in all of the missing values in the dataset.
+We plan to use the mean steps for that 5-mintue interval to fill in all of the missing values in the dataset.
 
-  +We first calculate the mean steps for the 5-mintue interval across all days.
+  We first calculate the mean steps for the 5-mintue interval across all days.
 
 ```r
 data4 <- aggregate(data$steps, by = list(data$interval), FUN = mean, na.rm = T)
 names(data4) <- c("interval", "mean")
 ```
   
-  +We check the first six rows again
+  We check the first six rows again
 
 ```r
 head(data4)
@@ -192,7 +192,7 @@ head(data4)
 ## 6       25 2.0943396
 ```
   
-  +Then, we merge the original data set with the new average data by interval.
+  Then, we merge the original data set with the new average data by interval.
 
 ```r
 newdata <- merge(data, data4, by = "interval")
@@ -209,7 +209,7 @@ head(newdata)
 ## 6        0     0 2012-11-15 1.716981
 ```
   
-  +Next, we rearrange the new data by date.
+  Next, we rearrange the new data by date.
 
 ```r
 newdata <- arrange(newdata, date)
@@ -226,7 +226,7 @@ head(newdata)
 ## 6       25    NA 2012-10-01 2.0943396
 ```
 
-*Finally, we create a new dataset that is equal to the original dataset but with the missing data filled in.
+Finally, we create a new dataset that is equal to the original dataset but with the missing data filled in.
 
 ```r
 naindex <- which(is.na(data))
@@ -245,7 +245,7 @@ head(finaldata)
 ## 6 2.0943396 2012-10-01       25
 ```
 
-*Make a histogram of the total number of steps taken each day.
+Make a histogram of the total number of steps taken each day.
 
 ```r
 data5 <- aggregate(finaldata$steps, by = list(finaldata$date), FUN = sum)
@@ -271,7 +271,7 @@ hist(data5$sum, col = "blue", xlab = " Total number of steps",
 
 ![](PA1_template_files/figure-html/unnamed-chunk-19-1.png) 
 
-*Calculate and report the mean and median total number of steps taken per day. 
+Calculate and report the mean and median total number of steps taken per day. 
 
 ```r
 mean(data5$sum)
@@ -295,7 +295,7 @@ These values differ greatly from the estimates from the first part of the assign
 
 We need to use the dataset with the filled-in missing values for this part.
 
-*Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
   First, we add a factor to the final dataset.
 
@@ -315,9 +315,9 @@ levels(finaldata$days)
 ## [1] "weekday" "weekend"
 ```
 
-*Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
+Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
-  +First, we recalculate the average number of steps by the 5-minute interval across all weekday days or weekend days.
+  First, we recalculate the average number of steps by the 5-minute interval across all weekday days or weekend days.
 
 ```r
 data6 <- aggregate(finaldata$steps, by  = list(finaldata$interval, finaldata$days), FUN=mean)
@@ -335,7 +335,7 @@ head(data6)
 ## 6       25 weekday 1.92976939
 ```
 
-  +Then, we make a panel plot by using qplot function.
+  Then, we make a panel plot by using qplot function.
 
 ```r
 qplot(data6$interval, data6$mean, data = data6, facets = days ~., 
